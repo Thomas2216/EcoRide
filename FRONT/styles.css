@@ -1,0 +1,12 @@
+body {
+    background-color: green;
+}
+    
+h1 {
+    display: flex;
+    justify-content: center;
+    font-size: 30px;
+    font-family: fantasy;
+    color: aqua;
+    text-align: center;
+}
