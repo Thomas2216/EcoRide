@@ -1,0 +1,60 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ecoride{% endblock %}
+
+{% block body %}
+<body>
+<h1>Ecoride, le covoiturage écologique et économique!</h1>
+    <header>
+        <!--debut navbar-->
+            <nav class="navbar navbar-expand-lg bg-body-tertiary">
+                <div class="container-fluid">
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Accueil</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Accès aux covoiturages</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Contact</a>
+                    </li>
+                </ul>
+                    <form class="d-flex" role="search">
+                        <input class="form-control me-2" type="search" placeholder="Où allez-vous?" aria-label="Où allez-vous?"/>
+                        <button class="btn btn-outline-success" type="submit">Rechercher</button>
+                    </form>
+                    
+                </div>
+                </div>
+            </nav>
+        <!--Fin NavBar-->
+    </header>
+    <main>
+        <h2>Ecoride, qu'est ce que c'est ? Une solution simple et engagée pour réduire les couts à la fois pour votre porte-monnaie et pour la planète !
+        </h2>
+        <div>
+        Texte de présentation de l'entreprise et de ses valeurs. Ecoride est une plateforme de covoiturage qui met en relation des conducteurs et des passagers souhaitant partager un trajet en voiture. Notre mission est de promouvoir une mobilité plus durable en réduisant le nombre de véhicules sur les routes, ce qui contribue à diminuer les émissions de gaz à effet de serre et la congestion urbaine.
+        </div>
+        <!-- Card présentant les avantages du covoiturage avec Ecoride -->
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Les avantages du covoiturage</h5>
+                <ul>
+                    <li>Économies sur les frais de transport</li>
+                    <li>Réduction de l'empreinte carbone</li>
+                    <li>Convivialité et partage</li>
+                </ul>
+            </div>
+        </div>
+    </main>
+    <footer>
+        <a href="mailto:valle_thomas@hotmail.fr">Mail</a>
+        <a href="http://">Mentions Légales</a>
+    </footer>
+</body>
+{% endblock %}
