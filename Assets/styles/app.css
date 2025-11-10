@@ -9,3 +9,12 @@ h1 {
     font-family: fantasy;
     text-align: center;
 }
+
+footer {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #f8f9fa;
+    text-align: center;
+    font-size: 14px;
+    color: #6c757d;
+}

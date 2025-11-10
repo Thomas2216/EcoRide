@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ecoride{% endblock %}
+
+{% block body %}
+<body>
+    <main>
+            <h2>Bienvenue sur votre espace utilisateur</h2>
+            <div>
+                <p>Gérez vos informations personnelles, vos trajets et vos réservations ici.</p>
+            </div>
+    </main>
+    <a href="{{ path ('saisir_covoiturage') }}">Proposer un covoiturage</a>
+    <a href="{{ path ('mes_covoiturages') }}">Voir mes covoiturages</a>
+    <a href="{{ path ('mes_reservations') }}">Voir mes réservations</a
+</body>
+{% endblock %}
