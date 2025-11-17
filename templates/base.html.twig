@@ -14,18 +14,13 @@
         {% endblock %}
     </head>
     <body>
-    <h1>Ecoride, le covoiturage écologique et économique!</h1>
     <header>
         <!--debut navbar-->
             <nav class="navbar navbar-expand-lg bg-body-tertiary">
-                <div class="container-fluid">
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <img class="logo"src="{{ asset ('Images/logo-ecoride.png') }}" alt="Logo Ecoride" width="85" height="85"/>
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="{{ path ('app_accueil') }}">Accueil</a>
+                        <a class="nav-link" href="{{ path ('app_accueil') }}">Accueil</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ path ('app_covoiturages') }}">Accès aux covoiturages</a>
@@ -38,7 +33,7 @@
                     </li>
                 </ul>
                     <form class="d-flex" role="search">
-                        <input class="form-control me-2" type="search" placeholder="Où allez-vous?" aria-label="Où allez-vous?"/>
+                        <input class="form-control me-2" type="search" placeholder="Où allez-vous?"/>
                         <button class="btn btn-outline-success" type="submit">Rechercher</button>
                     </form>
                     
@@ -49,5 +44,12 @@
     </header>
     {% block body %}
     {% endblock %}
+    <footer>
+        <img src="{{ asset('Images/facebook-icon.png') }}" alt="Facebook" width="24" height="24" /><a href="https://www.facebook.com/" style="color: burlywood;">Facebook</a><br>
+        <img src="{{ asset('Images/instagram-icon.png') }}" alt="Instagram" width="24" height="24" /><a href="https://www.instagram.com/" style="color: burlywood;">Instagram</a><br>
+        <a href="mailto:valle_thomas@hotmail.fr" style="color: burlywood;">Mail</a><br>
+        <a href="{{ path ('app_mentions_legales') }}" style="color: burlywood;">Mentions Légales</a><br>
+        <p>&copy; 2025 EcoRide. Tous droits réservés.</p>
+    </footer>
     </body>
 </html>

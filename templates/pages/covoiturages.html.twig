@@ -1,11 +1,29 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Ecoride{% endblock %}
+
 {% block body %}
-    <main>
-        <h2>Accès aux covoiturages</h2>
-        <div>
-            <p>Bienvenue sur la page des covoiturages. Ici, vous pouvez rechercher et réserver des trajets partagés avec d'autres utilisateurs.</p>
-        </div> 
-    </main>
+
+    <h2>Accès aux covoiturages</h2>
+    <div>
+        <p>Bienvenue sur la page des covoiturages. Ici, vous pouvez rechercher et réserver des trajets partagés avec d'autres utilisateurs.</p>
+    </div> 
+
+    {% if covoiturages is empty %}
+        <p>Aucun covoiturage disponible pour le moment. Veuillez revenir plus tard.</p>
+    {% else %}
+        <ul>
+            {% for covoiturage in covoiturages %}
+                <li>
+                    Trajet : {{ covoiturage.depart }} à {{ covoiturage.arrivee }}<br>
+                    Date : {{ covoiturage.date|date('d/m/Y H:i') }}<br>
+                    Prix : {{ covoiturage.prix }} €<br>
+                    Places disponibles : {{ covoiturage.placesDisponibles }}<br>
+                    <a href="{{ path('app_reserver_covoiturage', {'id': covoiturage.id}) }}">Réserver ce covoiturage</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <a href="{{ path('app_saisir_covoiturage') }}">Saisir un covoiturage</a>
 {% endblock %}
