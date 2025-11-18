@@ -9,7 +9,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Bundle\TwigBundle\TwigBundle;
-use Twig\Extra\TwigExtraBundle\TwigExtraBundle;
+use Symfony\Component\Security\Core\Role\Role;
+use Symfony\Config\package\Security\AccessControlConfig;
+
 
 class SecurityController extends AbstractController
 {
@@ -22,10 +24,23 @@ class SecurityController extends AbstractController
         // last username entered by the user
         $email = $authenticationUtils->getLastUsername();
 
-        return $this->render('security/login.html.twig', [
+        return $this->render('pages/connexion.html.twig', [
             'email' => $email,
             'error' => $error,
         ]);
+
+        if ($this->getRole() === ROLE_ADMIN) {
+            return $this->redirectToRoute('pages/admin/html.twig');
+        }
+        elseif ($this->getRole() === ROLE_EMPLOYEE) {
+            return $this->redirectToRoute('pages/employee/html.twig');
+        }
+        elseif ($this->getRole() === ROLE_USER) {
+            return $this->redirectToRoute('pages/user/html.twig');
+        }
+        else {
+            return $this->redirectToRoute('pages/connexion.html.twig');
+        }
     }
 
     #[Route(path: '/logout', name: 'app_logout')]

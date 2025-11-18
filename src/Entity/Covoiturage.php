@@ -3,8 +3,12 @@
 namespace App\Entity;
 
 use App\Repository\CovoiturageRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Tools\ORMSetup;
+use Doctrine\ORM\EntityManager;
 
 #[ORM\Entity(repositoryClass: CovoiturageRepository::class)]
 class Covoiturage
@@ -40,6 +44,24 @@ class Covoiturage
 
     #[ORM\Column]
     private ?float $prix_personne = null;
+
+    /**
+     * @var Collection<int, User>
+     */
+    #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'covoiturage')]
+    private Collection $covoiturage;
+
+    /**
+     * @var Collection<int, Voiture>
+     */
+    #[ORM\OneToMany(targetEntity: Voiture::class, mappedBy: 'covoiturage')]
+    private Collection $voitures;
+
+    public function __construct()
+    {
+        $this->covoiturage = new ArrayCollection();
+        $this->voitures = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -150,6 +172,63 @@ class Covoiturage
     public function setPrixPersonne(float $prix_personne): static
     {
         $this->prix_personne = $prix_personne;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getCovoiturage(): Collection
+    {
+        return $this->covoiturage;
+    }
+
+    public function addCovoiturage(User $covoiturage): static
+    {
+        if (!$this->covoiturage->contains($covoiturage)) {
+            $this->covoiturage->add($covoiturage);
+            $covoiturage->addCovoiturage($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCovoiturage(User $covoiturage): static
+    {
+        if ($this->covoiturage->removeElement($covoiturage)) {
+            $covoiturage->removeCovoiturage($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Voiture>
+     */
+    public function getVoitures(): Collection
+    {
+        return $this->voitures;
+    }
+
+    public function addVoiture(Voiture $voiture): static
+    {
+        if (!$this->voitures->contains($voiture)) {
+            $this->voitures->add($voiture);
+            $voiture->setCovoiturage($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVoiture(Voiture $voiture): static
+    {
+        if ($this->voitures->removeElement($voiture)) {
+            // set the owning side to null (unless already changed)
+            if ($voiture->getCovoiturage() === $this) {
+                $voiture->setCovoiturage(null);
+            }
+        }
 
         return $this;
     }

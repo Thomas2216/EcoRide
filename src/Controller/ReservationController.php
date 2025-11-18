@@ -1,0 +1,18 @@
+<?php
+
+namespace App\Controller;
+
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Attribute\Route;
+
+final class ReservationController extends AbstractController
+{
+    #[Route('/MesReservations', name: 'app_reservation', methods: ['GET'])]
+    public function index(): Response
+    {
+        return $this->render('pages/mesReservations.html.twig', [
+            'reservations' => []
+        ]);
+    }
+}

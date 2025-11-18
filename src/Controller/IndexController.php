@@ -49,15 +49,6 @@ final class IndexController extends AbstractController
             'controller_name' => 'IndexController',
         ]);
     }
-
-    #[Route('/Covoiturages', name: 'app_covoiturages')]
-    public function covoiturages(): Response
-    {
-        return $this->render('pages/covoiturages.html.twig', [
-            'controller_name' => 'IndexController',
-        ]);
-    }
-
     #[Route('/MesCovoiturages', name: 'app_mes_covoiturages')]
     public function mesCovoiturages(): Response
     {
@@ -65,19 +56,19 @@ final class IndexController extends AbstractController
             'controller_name' => 'IndexController',
         ]);
     }
-
-    #[Route('/MesReservations', name: 'app_mes_reservations')]
-    public function mesReservations(): Response
-    {
-        return $this->render('pages/mesReservations.html.twig', [
-            'controller_name' => 'IndexController',
-        ]);
-    }
-
+    
     #[Route('/Connexion', name: 'app_connexion')]
     public function connexion(): Response
     {
         return $this->render('pages/connexion.html.twig', [
+            'controller_name' => 'IndexController',
+        ]);
+    }
+
+    #[Route('/Create', name: 'app_create_user')]
+    public function createUser(): Response
+    {
+        return $this->render('pages/create.html.twig', [
             'controller_name' => 'IndexController',
         ]);
     }

@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -51,6 +53,27 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 50)]
     private ?string $pseudo = null;
+
+    /**
+     * @var Collection<int, avis>
+     */
+    #[ORM\ManyToMany(targetEntity: avis::class, inversedBy: 'users')]
+    private Collection $avis;
+
+    /**
+     * @var Collection<int, covoiturage>
+     */
+    #[ORM\ManyToMany(targetEntity: covoiturage::class, inversedBy: 'covoiturage')]
+    private Collection $covoiturage;
+
+    #[ORM\ManyToOne(inversedBy: 'users')]
+    private ?voiture $voiture = null;
+
+    public function __construct()
+    {
+        $this->avis = new ArrayCollection();
+        $this->covoiturage = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -215,5 +238,65 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function eraseCredentials(): void
     {
         // @deprecated, to be removed when upgrading to Symfony 8
+    }
+
+    /**
+     * @return Collection<int, avis>
+     */
+    public function getAvis(): Collection
+    {
+        return $this->avis;
+    }
+
+    public function addAvi(avis $avi): static
+    {
+        if (!$this->avis->contains($avi)) {
+            $this->avis->add($avi);
+        }
+
+        return $this;
+    }
+
+    public function removeAvi(avis $avi): static
+    {
+        $this->avis->removeElement($avi);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, covoiturage>
+     */
+    public function getCovoiturage(): Collection
+    {
+        return $this->covoiturage;
+    }
+
+    public function addCovoiturage(covoiturage $covoiturage): static
+    {
+        if (!$this->covoiturage->contains($covoiturage)) {
+            $this->covoiturage->add($covoiturage);
+        }
+
+        return $this;
+    }
+
+    public function removeCovoiturage(covoiturage $covoiturage): static
+    {
+        $this->covoiturage->removeElement($covoiturage);
+
+        return $this;
+    }
+
+    public function getVoiture(): ?voiture
+    {
+        return $this->voiture;
+    }
+
+    public function setVoiture(?voiture $voiture): static
+    {
+        $this->voiture = $voiture;
+
+        return $this;
     }
 }

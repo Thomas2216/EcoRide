@@ -3,20 +3,17 @@
 namespace App\Controller;
 
 use App\Form\UsersType;
-use Doctrine\ORM\EntityManager;
+
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\BrowserKit\Request;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request as HttpFoundationRequest;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Bundle\TwigBundle\TwigBundle;
-use Twig\Extra\TwigExtraBundle\TwigExtraBundle;
 
 final class UsersController extends AbstractController
 {
-    #[Route('/connexion', name: 'app_connexion', methods: ['GET', 'POST'])]
+    #[Route('/create', name: 'app_create_user', methods: ['GET', 'POST'])]
     public function create(HttpFoundationRequest $request, EntityManagerInterface $em): Response
     {
         $form = $this->createForm(UsersType::class);
@@ -36,7 +33,7 @@ final class UsersController extends AbstractController
             return $this->redirectToRoute('app_user');
         }
 
-        return $this->render('pages/connexion.html.twig', [
+        return $this->render('pages/create.html.twig', [
             'form' => $form->createView(),
         ]);
     }

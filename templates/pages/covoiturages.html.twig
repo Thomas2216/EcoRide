@@ -1,29 +1,34 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Ecoride{% endblock %}
-
 {% block body %}
 
-    <h2>Accès aux covoiturages</h2>
+    <h2 class="covoiturages-title">Accès aux covoiturages</h2>
     <div>
-        <p>Bienvenue sur la page des covoiturages. Ici, vous pouvez rechercher et réserver des trajets partagés avec d'autres utilisateurs.</p>
+        <p class="covoiturages-description">Bienvenue sur la page des covoiturages. Ici, vous pouvez rechercher et réserver des trajets partagés avec d'autres utilisateurs.</p>
     </div> 
 
-    {% if covoiturages is empty %}
-        <p>Aucun covoiturage disponible pour le moment. Veuillez revenir plus tard.</p>
-    {% else %}
-        <ul>
+    {% if covoiturages|length %}
             {% for covoiturage in covoiturages %}
-                <li>
-                    Trajet : {{ covoiturage.depart }} à {{ covoiturage.arrivee }}<br>
-                    Date : {{ covoiturage.date|date('d/m/Y H:i') }}<br>
-                    Prix : {{ covoiturage.prix }} €<br>
-                    Places disponibles : {{ covoiturage.placesDisponibles }}<br>
-                    <a href="{{ path('app_reserver_covoiturage', {'id': covoiturage.id}) }}">Réserver ce covoiturage</a>
+                <li class="card-list">
+                    <div class="card">
+                        <div class="card-header">
+                            Départ : {{ covoiturage.lieuDepart }} <br>
+                            Arrivée : {{ covoiturage.lieuArrivee }}
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">Date : {{ covoiturage.dateDepart | date('d/m/Y') }} </h5>
+                            <h5 class="card-title">Heure de départ : {{ covoiturage.heureDepart | date('H:i') }} </h5>
+                            <h5 class="card-title">Arrivee estimée : {{ covoiturage.heureArrivee | date('H:i') }} </h5>
+                            <p class="card-text">Places disponibles : {{ covoiturage.nbPlace }}</p>
+                            <p class="card-text">Prix : {{ covoiturage.prixPersonne }} €</p>
+                            <a href="#" class="btn btn-primary" style="background-color: burlywood; color: #198754; border-color: #198754;">Réserver ce covoiturage</a>
+                        </div>
+                    </div>
                 </li>
             {% endfor %}
-        </ul>
+    {% else %}
+        <p>Aucun covoiturage disponible pour le moment. Veuillez revenir plus tard.</p>
     {% endif %}
 
-    <a href="{{ path('app_saisir_covoiturage') }}">Saisir un covoiturage</a>
+    <a href="{{ path('app_saisir_covoiturage') }}" class="button-saisie-voyage" style="color: #198754; border-color: #198754;">Saisir un covoiturage</a>
 {% endblock %}

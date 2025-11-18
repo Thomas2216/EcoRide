@@ -9,6 +9,24 @@
         <div>
             <p>Voici la liste de toutes les réservations que vous avez effectuées jusqu'à présent.</p>
         </div>
-    </main>
+        {% if reservations|length %}
+            {% for reservation in reservations %}
+                        <li>
+                            <div class="card">
+            <div class="card-header">
+                Featured
+            </div>
+            <div class="card-body">
+                <h5 class="card-title"><strong>Covoiturage ID :</strong> {{ reservation.covoiturageId }}</h5>
+                <p class="card-text"><strong>Date de réservation :</strong> {{ reservation.date | date('d/m/Y H:i') }}</p>
+                <p class="card-text"><strong>Statut :</strong> {{ reservation.statut }}</p>
+            </div>
+            </div>
+                </li>
+            {% endfor %}
+        {% else %}
+            <p>Vous n'avez effectué aucune réservation pour le moment.</p>
+        {% endif %}
+        </main>
 </body>
 {% endblock %}
