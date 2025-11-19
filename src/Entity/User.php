@@ -31,7 +31,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var list<string> The user roles
      */
     #[ORM\Column]
-    private array $roles = [];
+    public array $roles = ['ROLE_USER'];
 
     /**
      * @var string The hashed password
@@ -55,19 +55,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $pseudo = null;
 
     /**
-     * @var Collection<int, avis>
+     * @var Collection<int, Avis>
      */
-    #[ORM\ManyToMany(targetEntity: avis::class, inversedBy: 'users')]
+    #[ORM\ManyToMany(targetEntity: Avis::class, inversedBy: 'users')]
     private Collection $avis;
 
     /**
-     * @var Collection<int, covoiturage>
+     * @var Collection<int, Covoiturage>
      */
-    #[ORM\ManyToMany(targetEntity: covoiturage::class, inversedBy: 'covoiturage')]
+    #[ORM\ManyToMany(targetEntity: Covoiturage::class, inversedBy: 'covoiturage')]
     private Collection $covoiturage;
 
     #[ORM\ManyToOne(inversedBy: 'users')]
-    private ?voiture $voiture = null;
+    private ?Voiture $voiture = null;
+
 
     public function __construct()
     {
