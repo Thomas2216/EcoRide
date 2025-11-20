@@ -2,33 +2,101 @@
 
 {% block body %}
 
-    <h2 class="covoiturages-title">Accès aux covoiturages</h2>
-    <div>
-        <p class="covoiturages-description">Bienvenue sur la page des covoiturages. Ici, vous pouvez rechercher et réserver des trajets partagés avec d'autres utilisateurs.</p>
-    </div> 
+<h2 class="covoiturages-title">Accès aux covoiturages</h2>
 
-    {% if covoiturages|length %}
-            {% for covoiturage in covoiturages %}
-                <li class="card-list">
-                    <div class="card">
-                        <div class="card-header">
-                            Départ : {{ covoiturage.lieuDepart }} <br>
-                            Arrivée : {{ covoiturage.lieuArrivee }}
-                        </div>
-                        <div class="card-body">
-                            <h5 class="card-title">Date : {{ covoiturage.dateDepart | date('d/m/Y') }} </h5>
-                            <h5 class="card-title">Heure de départ : {{ covoiturage.heureDepart | date('H:i') }} </h5>
-                            <h5 class="card-title">Arrivee estimée : {{ covoiturage.heureArrivee | date('H:i') }} </h5>
-                            <p class="card-text">Places disponibles : {{ covoiturage.nbPlace }}</p>
-                            <p class="card-text">Prix : {{ covoiturage.prixPersonne }} €</p>
-                            <a href="#" class="btn btn-primary" style="background-color: burlywood; color: #198754; border-color: #198754;">Réserver ce covoiturage</a>
-                        </div>
+<div>
+    <p class="covoiturages-description">
+        Bienvenue sur la page des covoiturages. Ici, vous pouvez rechercher et réserver des trajets partagés avec d'autres utilisateurs.
+    </p>
+</div>
+
+{% if covoiturages|length %}
+    <div class="d-flex flex-wrap justify-content-center">
+        {% for covoiturage in covoiturages %}
+            <div class="card-list">
+                <div class="card">
+                    <div class="card-header">
+                        Départ : {{ covoiturage.lieuDepart }} <br>
+                        Arrivée : {{ covoiturage.lieuArrivee }}
                     </div>
-                </li>
-            {% endfor %}
-    {% else %}
-        <p>Aucun covoiturage disponible pour le moment. Veuillez revenir plus tard.</p>
-    {% endif %}
 
-    <a href="{{ path('app_saisir_covoiturage') }}" class="button-saisie-voyage" style="color: #198754; border-color: #198754;">Saisir un covoiturage</a>
+                    <div class="card-body">
+
+                        <h5 class="card-title">Date : {{ covoiturage.dateDepart|date('d/m/Y') }}</h5>
+                        <h5 class="card-title">Heure de départ : {{ covoiturage.heureDepart|date('H:i') }}</h5>
+                        <h5 class="card-title">Arrivée estimée : {{ covoiturage.heureArrivee|date('H:i') }}</h5>
+
+                        <p class="card-text">Places disponibles : {{ covoiturage.nbPlace }}</p>
+                        <p class="card-text">Prix : {{ covoiturage.prixPersonne }} €</p>
+
+                        <hr>
+
+                        <p class="card-text">
+                            👤 Conducteur :
+                            {{ covoiturage.conducteur.prenom }} {{ covoiturage.conducteur.nom }}
+                        </p>
+
+                        <p class="card-text">
+                            🚗 Véhicule :
+                            {% if covoiturage.voiture %}
+                                {{ covoiturage.voiture.marque }} {{ covoiturage.voiture.modele }}
+                            {% else %}
+                                <em>Aucune voiture associée</em>
+                            {% endif %}
+                        </p>
+
+                        <hr>
+
+                        {# --- AJOUT DES AVIS DU CONDUCTEUR --- #}
+                        <p class="card-text fw-bold">⭐ Avis sur le conducteur :</p>
+
+                        {% set avisConducteur = covoiturage.conducteur.avis %}
+                        
+                        {% if avisConducteur|length > 0 %}
+
+                            {# Note moyenne #}
+                            {% set total = 0 %}
+                            {% for avis in avisConducteur %}
+                                {% set total = total + avis.note %}
+                            {% endfor %}
+                            {% set moyenne = (total / avisConducteur|length)|number_format(1) %}
+
+                            <p class="card-text">
+                                Note moyenne : <strong>{{ moyenne }}/5</strong> ⭐
+                            </p>
+
+                            <ul>
+                                {% for avis in avisConducteur %}
+                                    <li>
+                                        <strong>{{ avis.note }}/5</strong> — {{ avis.commentaire ?: "Pas de commentaire" }}
+                                    </li>
+                                {% endfor %}
+                            </ul>
+
+                        {% else %}
+                            <p><em>Aucun avis pour ce conducteur pour le moment.</em></p>
+                        {% endif %}
+
+                        <a href="#"
+                            class="btn btn-primary"
+                            style="background-color: burlywood; color: #198754; border-color: #198754;">
+                            Réserver ce covoiturage
+                        </a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <p class="text-center mt-4">Aucun covoiturage disponible pour le moment.</p>
+{% endif %}
+
+<div class="text-center mt-5">
+    <a href="{{ path('app_saisir_covoiturage') }}"
+        class="button-saisie-voyage"
+        style="color: #198754; border-color: #198754;">
+        Saisir un covoiturage
+    </a>
+</div>
+
 {% endblock %}

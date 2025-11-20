@@ -13,19 +13,37 @@ class SecurityController extends AbstractController
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
         if ($this->getUser()) {
-            return $this->redirectToRoute('app_user');
+            return $this->redirectToRoute('app_connexion_redirect');
         }
-        // get the login error if there is one
+
+        // Erreur éventuelle
         $error = $authenticationUtils->getLastAuthenticationError();
-        // last username entered by the user
+        // Dernier email saisi
         $lastUsername = $authenticationUtils->getLastUsername();
 
-        return $this->render('pages/connexion.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
+        return $this->render('pages/connexion.html.twig', [
+            'last_username' => $lastUsername,
+            'error' => $error
+        ]);
     }
+
     #[Route(path: '/logout', name: 'app_logout')]
-    public function logout(): void
+    public function logout(): never
     {
-        throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
+        throw new \LogicException('Logout handled by Symfony firewall.');
     }
-    
+
+    #[Route('/connexion/redirect', name: 'app_connexion_redirect')]
+    public function redirectAfterLogin(): Response
+    {
+        if ($this->isGranted('ROLE_ADMIN')) {
+            return $this->redirectToRoute('app_admin');
+        }
+
+        if ($this->isGranted('ROLE_EMPLOYEE')) {
+            return $this->redirectToRoute('app_employee');
+        }
+
+        return $this->redirectToRoute('app_user');
+    }
 }

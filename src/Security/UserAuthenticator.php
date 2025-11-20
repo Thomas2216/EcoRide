@@ -2,6 +2,8 @@
 
 namespace App\Security;
 
+use App\Entity\User;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,46 +24,52 @@ class UserAuthenticator extends AbstractLoginFormAuthenticator
 
     public const LOGIN_ROUTE = 'app_connexion';
 
-    public function __construct(private UrlGeneratorInterface $urlGenerator)
-    {
-    }
+    public function __construct(
+        private UrlGeneratorInterface $urlGenerator,
+        private Security $security
+    ) {}
 
     public function authenticate(Request $request): Passport
     {
-        $email = $request->getPayload()->getString('email');
+        $email = $request->request->get('email', '');
 
         $request->getSession()->set(SecurityRequestAttributes::LAST_USERNAME, $email);
 
         return new Passport(
             new UserBadge($email),
-            new PasswordCredentials($request->getPayload()->getString('password')),
+            new PasswordCredentials($request->request->get('password', '')),
             [
-                new CsrfTokenBadge('authenticate', $request->getPayload()->getString('_csrf_token')),
+                new CsrfTokenBadge('authenticate', $request->request->get('_csrf_token')),
                 new RememberMeBadge(),
             ]
         );
     }
 
-public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
-{
-    $user = $token->getUser();
+    public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
+    {
+        $user = $token->getUser();
 
-    // Redirection selon le rôle
-    if (in_array('ROLE_ADMIN', $user->getRoles(), true)) {
-        $redirectUrl = $this->urlGenerator->generate('app_admin');
-    } elseif (in_array('ROLE_EMPLOYEE', $user->getRoles(), true)) {
-        $redirectUrl = $this->urlGenerator->generate('app_employee');
-    } else {
-        $redirectUrl = $this->urlGenerator->generate('app_user');
+        if (!$user instanceof User) {
+            throw new \LogicException('Unexpected user type.');
+        }
+
+        if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
+            return new RedirectResponse($targetPath);
+        }
+
+        if ($this->security->isGranted('ROLE_ADMIN')) {
+            return new RedirectResponse($this->urlGenerator->generate('app_admin'));
+        }
+
+        if ($this->security->isGranted('ROLE_EMPLOYEE')) {
+            return new RedirectResponse($this->urlGenerator->generate('app_employee'));
+        }
+
+        return new RedirectResponse($this->urlGenerator->generate('app_user'));
     }
-
-    return new RedirectResponse($redirectUrl);
-}
 
     protected function getLoginUrl(Request $request): string
     {
         return $this->urlGenerator->generate(self::LOGIN_ROUTE);
     }
-    
 }
-

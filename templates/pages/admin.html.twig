@@ -1,10 +1,20 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}Administration – Ecoride{% endblock %}
+
 {% block body %}
-    <main>
-        <h2>Administration</h2>
-        <div>
-            <p>Bienvenue sur la page d'administration.</p>
-        </div>
-    </main>
+<main class="container my-5">
+
+    <h2 class="text-center mb-4">Administration</h2>
+
+    <div class="p-4 bg-light rounded shadow-sm">
+        <p>
+            Bienvenue sur la page d'administration.  
+            Utilisez le menu pour accéder aux différentes sections de gestion.
+        </p>
+        <a href="{{ path('app_logout') }}">Se déconnecter</a>
+
+    </div>
+
+</main>
 {% endblock %}

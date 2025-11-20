@@ -1,21 +1,60 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Ecoride{% endblock %}
+{% block title %}Mentions légales – Ecoride{% endblock %}
 
 {% block body %}
-    <main class="mentions-legales">
-        <h2>Mentions Légales</h2>
-        <div>
-            <ul>
-                <li>Éditeur du site : EcoRide</li>
-                <li>Responsable de la publication : Thomas Valle</li>
-                <li>Hébergeur : [Nom de l'hébergeur]</li>
-                <li>Propriété intellectuelle : Tous les contenus présents sur ce site sont protégés par le droit d'auteur.</li>
-                <li>Collecte de données personnelles : Conformément à la réglementation en vigueur, nous collectons certaines données personnelles.</li>
-                <li>Cookies : Ce site utilise des cookies pour améliorer l'expérience utilisateur.</li>
-                <li>Liens externes : Notre site peut contenir des liens vers des sites externes.</li>
-                <li>Droit applicable : Les présentes mentions légales sont régies par le droit français.</li>
-            </ul>
-        </div>
-    </main>
+<main class="container my-5 mentions-legales">
+
+    <h2 class="mb-4 text-center">Mentions Légales</h2>
+
+    <section class="mb-4">
+        <h4>Éditeur du site</h4>
+        <p>EcoRide</p>
+
+        <h4>Responsable de la publication</h4>
+        <p>Thomas Valle</p>
+
+        <h4>Hébergeur</h4>
+        <p>[Nom de l'hébergeur]</p>
+    </section>
+
+    <section class="mb-4">
+        <h4>Propriété intellectuelle</h4>
+        <p>
+            Tous les contenus présents sur ce site sont protégés par le droit d'auteur.  
+            Toute reproduction ou distribution sans autorisation est interdite.
+        </p>
+    </section>
+
+    <section class="mb-4">
+        <h4>Données personnelles</h4>
+        <p>
+            Conformément à la réglementation en vigueur, certaines données personnelles peuvent être collectées.  
+            Vous pouvez demander leur suppression ou modification à tout moment.
+        </p>
+    </section>
+
+    <section class="mb-4">
+        <h4>Cookies</h4>
+        <p>
+            Ce site utilise des cookies afin d’améliorer l’expérience utilisateur.
+        </p>
+    </section>
+
+    <section class="mb-4">
+        <h4>Liens externes</h4>
+        <p>
+            Le site peut contenir des liens vers des sites externes.  
+            EcoRide n’est pas responsable de leur contenu.
+        </p>
+    </section>
+
+    <section class="mb-4">
+        <h4>Droit applicable</h4>
+        <p>
+            Les présentes mentions légales sont régies par le droit français.
+        </p>
+    </section>
+
+</main>
 {% endblock %}

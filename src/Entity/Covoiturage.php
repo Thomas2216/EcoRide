@@ -7,8 +7,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Tools\ORMSetup;
-use Doctrine\ORM\EntityManager;
 
 #[ORM\Entity(repositoryClass: CovoiturageRepository::class)]
 class Covoiturage
@@ -19,19 +17,19 @@ class Covoiturage
     private ?int $id = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
-    private ?\DateTime $date_depart = null;
+    private ?\DateTimeInterface $date_depart = null;
 
     #[ORM\Column(type: Types::TIME_MUTABLE)]
-    private ?\DateTime $heure_depart = null;
+    private ?\DateTimeInterface $heure_depart = null;
 
     #[ORM\Column(length: 50)]
     private ?string $lieu_depart = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
-    private ?\DateTime $date_arrivee = null;
+    private ?\DateTimeInterface $date_arrivee = null;
 
     #[ORM\Column(type: Types::TIME_MUTABLE)]
-    private ?\DateTime $heure_arrivee = null;
+    private ?\DateTimeInterface $heure_arrivee = null;
 
     #[ORM\Column(length: 50)]
     private ?string $lieu_arrivee = null;
@@ -45,22 +43,20 @@ class Covoiturage
     #[ORM\Column]
     private ?float $prix_personne = null;
 
-    /**
-     * @var Collection<int, User>
-     */
+    /** @var Collection<int, User> */
     #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'covoiturage')]
-    private Collection $covoiturage;
+    private Collection $users;
 
-    /**
-     * @var Collection<int, Voiture>
-     */
-    #[ORM\OneToMany(targetEntity: Voiture::class, mappedBy: 'covoiturage')]
-    private Collection $voitures;
+    #[ORM\ManyToOne(inversedBy: 'covoituragesCrees')]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?User $conducteur = null;
+
+    #[ORM\ManyToOne(inversedBy: 'covoiturages')]
+    private ?Voiture $voiture = null;
 
     public function __construct()
     {
-        $this->covoiturage = new ArrayCollection();
-        $this->voitures = new ArrayCollection();
+        $this->users = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -68,27 +64,25 @@ class Covoiturage
         return $this->id;
     }
 
-    public function getDateDepart(): ?\DateTime
+    public function getDateDepart(): ?\DateTimeInterface
     {
         return $this->date_depart;
     }
 
-    public function setDateDepart(\DateTime $date_depart): static
+    public function setDateDepart(\DateTimeInterface $date_depart): static
     {
         $this->date_depart = $date_depart;
-
         return $this;
     }
 
-    public function getHeureDepart(): ?\DateTime
+    public function getHeureDepart(): ?\DateTimeInterface
     {
         return $this->heure_depart;
     }
 
-    public function setHeureDepart(\DateTime $heure_depart): static
+    public function setHeureDepart(\DateTimeInterface $heure_depart): static
     {
         $this->heure_depart = $heure_depart;
-
         return $this;
     }
 
@@ -100,31 +94,28 @@ class Covoiturage
     public function setLieuDepart(string $lieu_depart): static
     {
         $this->lieu_depart = $lieu_depart;
-
         return $this;
     }
 
-    public function getDateArrivee(): ?\DateTime
+    public function getDateArrivee(): ?\DateTimeInterface
     {
         return $this->date_arrivee;
     }
 
-    public function setDateArrivee(\DateTime $date_arrivee): static
+    public function setDateArrivee(\DateTimeInterface $date_arrivee): static
     {
         $this->date_arrivee = $date_arrivee;
-
         return $this;
     }
 
-    public function getHeureArrivee(): ?\DateTime
+    public function getHeureArrivee(): ?\DateTimeInterface
     {
         return $this->heure_arrivee;
     }
 
-    public function setHeureArrivee(\DateTime $heure_arrivee): static
+    public function setHeureArrivee(\DateTimeInterface $heure_arrivee): static
     {
         $this->heure_arrivee = $heure_arrivee;
-
         return $this;
     }
 
@@ -136,7 +127,6 @@ class Covoiturage
     public function setLieuArrivee(string $lieu_arrivee): static
     {
         $this->lieu_arrivee = $lieu_arrivee;
-
         return $this;
     }
 
@@ -148,7 +138,6 @@ class Covoiturage
     public function setStatut(string $statut): static
     {
         $this->statut = $statut;
-
         return $this;
     }
 
@@ -160,7 +149,6 @@ class Covoiturage
     public function setNbPlace(int $nb_place): static
     {
         $this->nb_place = $nb_place;
-
         return $this;
     }
 
@@ -172,64 +160,51 @@ class Covoiturage
     public function setPrixPersonne(float $prix_personne): static
     {
         $this->prix_personne = $prix_personne;
-
         return $this;
     }
 
-    /**
-     * @return Collection<int, User>
-     */
-    public function getCovoiturage(): Collection
+    /** @return Collection<int, User> */
+    public function getUsers(): Collection
     {
-        return $this->covoiturage;
+        return $this->users;
     }
 
-    public function addCovoiturage(User $covoiturage): static
+    public function addUser(User $user): static
     {
-        if (!$this->covoiturage->contains($covoiturage)) {
-            $this->covoiturage->add($covoiturage);
-            $covoiturage->addCovoiturage($this);
+        if (!$this->users->contains($user)) {
+            $this->users->add($user);
+            $user->addCovoiturage($this);
         }
-
         return $this;
     }
 
-    public function removeCovoiturage(User $covoiturage): static
+    public function removeUser(User $user): static
     {
-        if ($this->covoiturage->removeElement($covoiturage)) {
-            $covoiturage->removeCovoiturage($this);
+        if ($this->users->removeElement($user)) {
+            $user->removeCovoiturage($this);
         }
-
         return $this;
     }
 
-    /**
-     * @return Collection<int, Voiture>
-     */
-    public function getVoitures(): Collection
+    public function getConducteur(): ?User
     {
-        return $this->voitures;
+        return $this->conducteur;
     }
 
-    public function addVoiture(Voiture $voiture): static
+    public function setConducteur(?User $conducteur): static
     {
-        if (!$this->voitures->contains($voiture)) {
-            $this->voitures->add($voiture);
-            $voiture->setCovoiturage($this);
-        }
-
+        $this->conducteur = $conducteur;
         return $this;
     }
 
-    public function removeVoiture(Voiture $voiture): static
+    public function getVoiture(): ?Voiture
     {
-        if ($this->voitures->removeElement($voiture)) {
-            // set the owning side to null (unless already changed)
-            if ($voiture->getCovoiturage() === $this) {
-                $voiture->setCovoiturage(null);
-            }
-        }
+        return $this->voiture;
+    }
 
+    public function setVoiture(?Voiture $voiture): static
+    {
+        $this->voiture = $voiture;
         return $this;
     }
 }

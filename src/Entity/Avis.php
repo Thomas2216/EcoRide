@@ -48,7 +48,6 @@ class Avis
     public function setCommentaire(?string $commentaire): static
     {
         $this->commentaire = $commentaire;
-
         return $this;
     }
 
@@ -60,7 +59,6 @@ class Avis
     public function setNote(int $note): static
     {
         $this->note = $note;
-
         return $this;
     }
 
@@ -72,7 +70,6 @@ class Avis
     public function setStatut(string $statut): static
     {
         $this->statut = $statut;
-
         return $this;
     }
 
@@ -88,7 +85,7 @@ class Avis
     {
         if (!$this->users->contains($user)) {
             $this->users->add($user);
-            $user->addAvi($this);
+            $user->addAvis($this); // synchronisation ManyToMany
         }
 
         return $this;
@@ -97,7 +94,7 @@ class Avis
     public function removeUser(User $user): static
     {
         if ($this->users->removeElement($user)) {
-            $user->removeAvi($this);
+            $user->removeAvis($this); // synchronisation ManyToMany
         }
 
         return $this;

@@ -27,15 +27,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 180)]
     private ?string $email = null;
 
-    /**
-     * @var list<string> The user roles
-     */
     #[ORM\Column]
-    public array $roles = ['ROLE_USER'];
+    private array $roles = ['ROLE_USER'];
 
-    /**
-     * @var string The hashed password
-     */
     #[ORM\Column]
     private ?string $password = null;
 
@@ -45,29 +39,28 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 50, nullable: true)]
     private ?string $adresse = null;
 
-    #[ORM\Column(type: 'date', nullable: false)]
-    private ?\DateTime $date_naissance = null;
+    #[ORM\Column(type: 'date')]
+    private ?\DateTimeInterface $date_naissance = null;
 
-    #[ORM\Column(type: 'blob', nullable: true)]
-    private $photo;
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $photo = null;
 
     #[ORM\Column(length: 50)]
     private ?string $pseudo = null;
 
-    /**
-     * @var Collection<int, Avis>
-     */
+    /** @var Collection<int, Avis> */
     #[ORM\ManyToMany(targetEntity: Avis::class, inversedBy: 'users')]
     private Collection $avis;
 
-    /**
-     * @var Collection<int, Covoiturage>
-     */
-    #[ORM\ManyToMany(targetEntity: Covoiturage::class, inversedBy: 'covoiturage')]
+    /** @var Collection<int, Covoiturage> */
+    #[ORM\ManyToMany(targetEntity: Covoiturage::class, inversedBy: 'users')]
     private Collection $covoiturage;
 
     #[ORM\ManyToOne(inversedBy: 'users')]
     private ?Voiture $voiture = null;
+
+    #[ORM\Column(type: 'string', length: 20)]
+    private ?string $type_utilisateur = 'passager'; // valeur par défaut
 
 
     public function __construct()
@@ -89,7 +82,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setNom(string $nom): static
     {
         $this->nom = $nom;
-
         return $this;
     }
 
@@ -101,67 +93,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPrenom(string $prenom): static
     {
         $this->prenom = $prenom;
-
-        return $this;
-    }
-
-    public function getTelephone(): ?string
-    {
-        return $this->telephone;
-    }
-
-    public function setTelephone(string $telephone): static
-    {
-        $this->telephone = $telephone;
-
-        return $this;
-    }
-
-    public function getAdresse(): ?string
-    {
-        return $this->adresse;
-    }
-
-    public function setAdresse(?string $adresse): static
-    {
-        $this->adresse = $adresse;
-
-        return $this;
-    }
-
-    public function getDateNaissance(): ?\DateTime
-    {
-        return $this->date_naissance;
-    }
-
-    public function setDateNaissance(\DateTime $date_naissance): static
-    {
-        $this->date_naissance = $date_naissance;
-
-        return $this;
-    }
-
-    public function getPhoto()
-    {
-        return $this->photo;
-    }
-
-    public function setPhoto($photo): static
-    {
-        $this->photo = $photo;
-
-        return $this;
-    }
-
-    public function getPseudo(): ?string
-    {
-        return $this->pseudo;
-    }
-
-    public function setPseudo(string $pseudo): static
-    {
-        $this->pseudo = $pseudo;
-
         return $this;
     }
 
@@ -173,45 +104,27 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setEmail(string $email): static
     {
         $this->email = $email;
-
         return $this;
     }
 
-    /**
-     * A visual identifier that represents this user.
-     *
-     * @see UserInterface
-     */
     public function getUserIdentifier(): string
     {
         return (string) $this->email;
     }
 
-    /**
-     * @see UserInterface
-     */
     public function getRoles(): array
     {
         $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
         $roles[] = 'ROLE_USER';
-
         return array_unique($roles);
     }
 
-    /**
-     * @param list<string> $roles
-     */
     public function setRoles(array $roles): static
     {
         $this->roles = $roles;
-
         return $this;
     }
 
-    /**
-     * @see PasswordAuthenticatedUserInterface
-     */
     public function getPassword(): ?string
     {
         return $this->password;
@@ -220,84 +133,144 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPassword(string $password): static
     {
         $this->password = $password;
-
         return $this;
     }
 
-    /**
-     * Ensure the session doesn't contain actual password hashes by CRC32C-hashing them, as supported since Symfony 7.3.
-     */
-    public function __serialize(): array
-    {
-        $data = (array) $this;
-        $data["\0".self::class."\0password"] = hash('crc32c', $this->password);
-
-        return $data;
-    }
-
-    #[\Deprecated]
     public function eraseCredentials(): void
     {
-        // @deprecated, to be removed when upgrading to Symfony 8
+        // nothing needed
     }
 
-    /**
-     * @return Collection<int, avis>
-     */
+    public function getTelephone(): ?string
+    {
+        return $this->telephone;
+    }
+
+    public function setTelephone(string $telephone): static
+    {
+        $this->telephone = $telephone;
+        return $this;
+    }
+
+    public function getAdresse(): ?string
+    {
+        return $this->adresse;
+    }
+
+    public function setAdresse(?string $adresse): static
+    {
+        $this->adresse = $adresse;
+        return $this;
+    }
+
+    public function getDateNaissance(): ?\DateTimeInterface
+    {
+        return $this->date_naissance;
+    }
+
+    public function setDateNaissance(\DateTimeInterface $date_naissance): static
+    {
+        $this->date_naissance = $date_naissance;
+        return $this;
+    }
+
+    public function getPhoto(): ?string
+    {
+        return $this->photo;
+    }
+
+    public function setPhoto(?string $photo): static
+    {
+        $this->photo = $photo;
+        return $this;
+    }
+
+    public function getPseudo(): ?string
+    {
+        return $this->pseudo;
+    }
+
+    public function setPseudo(string $pseudo): static
+    {
+        $this->pseudo = $pseudo;
+        return $this;
+    }
+
+    /** @return Collection<int, Avis> */
     public function getAvis(): Collection
     {
         return $this->avis;
     }
 
-    public function addAvi(avis $avi): static
+    public function addAvis(Avis $avis): static
     {
-        if (!$this->avis->contains($avi)) {
-            $this->avis->add($avi);
+        if (!$this->avis->contains($avis)) {
+            $this->avis->add($avis);
+            $avis->addUser($this);
         }
 
         return $this;
     }
 
-    public function removeAvi(avis $avi): static
+    public function removeAvis(Avis $avis): static
     {
-        $this->avis->removeElement($avi);
+        if ($this->avis->removeElement($avis)) {
+            $avis->removeUser($this);
+        }
 
         return $this;
     }
 
-    /**
-     * @return Collection<int, covoiturage>
-     */
+    /** @return Collection<int, Covoiturage> */
     public function getCovoiturage(): Collection
     {
         return $this->covoiturage;
     }
 
-    public function addCovoiturage(covoiturage $covoiturage): static
+    public function addCovoiturage(Covoiturage $c): static
     {
-        if (!$this->covoiturage->contains($covoiturage)) {
-            $this->covoiturage->add($covoiturage);
+        if (!$this->covoiturage->contains($c)) {
+            $this->covoiturage->add($c);
+            $c->addUser($this);
         }
 
         return $this;
     }
 
-    public function removeCovoiturage(covoiturage $covoiturage): static
+    public function removeCovoiturage(Covoiturage $c): static
     {
-        $this->covoiturage->removeElement($covoiturage);
+        if ($this->covoiturage->removeElement($c)) {
+            $c->removeUser($this);
+        }
 
         return $this;
     }
 
-    public function getVoiture(): ?voiture
+    public function getVoiture(): ?Voiture
     {
         return $this->voiture;
     }
 
-    public function setVoiture(?voiture $voiture): static
+    public function setVoiture(?Voiture $voiture): static
     {
         $this->voiture = $voiture;
-
         return $this;
     }
+
+    public function __toString(): string
+    {
+        return $this->pseudo ?? $this->email ?? 'Utilisateur';
+    }
+
+    public function getTypeUtilisateur(): ?string
+{
+    return $this->type_utilisateur;
+}
+
+    public function setTypeUtilisateur(string $type): self
+    {
+        $this->type_utilisateur = $type;
+        return $this;
+    }
+
 }

@@ -11,5 +11,10 @@
     <a href="{{ path ('app_saisir_covoiturage') }}">Proposer un covoiturage</a>
     <a href="{{ path ('app_mes_covoiturages') }}">Voir mes covoiturages</a>
     <a href="{{ path ('app_mes_reservations') }}">Voir mes réservations</a>
+    <a href="{{ path('app_logout') }}">Se déconnecter</a>
+
+
+    <p>Type d’utilisateur : {{ app.user.typeUtilisateur }}</p>
+
 </body>
 {% endblock %}

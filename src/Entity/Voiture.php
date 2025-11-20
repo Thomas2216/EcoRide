@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\VoitureRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: VoitureRepository::class)]
@@ -27,17 +28,17 @@ class Voiture
     #[ORM\Column(length: 50, nullable: true)]
     private ?string $couleur = null;
 
-    #[ORM\Column(length: 50, nullable: true)]
-    private ?string $date_premiere_immatriculation = null;
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $date_premiere_immatriculation = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $marque = null;
 
     /**
      * @var Collection<int, User>
      */
     #[ORM\OneToMany(targetEntity: User::class, mappedBy: 'voiture')]
     private Collection $users;
-
-    #[ORM\ManyToOne(inversedBy: 'voitures')]
-    private ?covoiturage $covoiturage = null;
 
     public function __construct()
     {
@@ -57,7 +58,6 @@ class Voiture
     public function setModele(string $modele): static
     {
         $this->modele = $modele;
-
         return $this;
     }
 
@@ -69,7 +69,6 @@ class Voiture
     public function setImmatriculation(string $immatriculation): static
     {
         $this->immatriculation = $immatriculation;
-
         return $this;
     }
 
@@ -81,7 +80,6 @@ class Voiture
     public function setEnergie(string $energie): static
     {
         $this->energie = $energie;
-
         return $this;
     }
 
@@ -93,19 +91,17 @@ class Voiture
     public function setCouleur(?string $couleur): static
     {
         $this->couleur = $couleur;
-
         return $this;
     }
 
-    public function getDatePremiereImmatriculation(): ?string
+    public function getDatePremiereImmatriculation(): ?\DateTimeInterface
     {
         return $this->date_premiere_immatriculation;
     }
 
-    public function setDatePremiereImmatriculation(?string $date_premiere_immatriculation): static
+    public function setDatePremiereImmatriculation(?\DateTimeInterface $date): static
     {
-        $this->date_premiere_immatriculation = $date_premiere_immatriculation;
-
+        $this->date_premiere_immatriculation = $date;
         return $this;
     }
 
@@ -130,7 +126,6 @@ class Voiture
     public function removeUser(User $user): static
     {
         if ($this->users->removeElement($user)) {
-            // set the owning side to null (unless already changed)
             if ($user->getVoiture() === $this) {
                 $user->setVoiture(null);
             }
@@ -139,16 +134,14 @@ class Voiture
         return $this;
     }
 
-    public function getCovoiturage(): ?covoiturage
-    {
-        return $this->covoiturage;
-    }
+    public function getMarque(): ?string
+{
+    return $this->marque;
+}
 
-    public function setCovoiturage(?covoiturage $covoiturage): static
-    {
-        $this->covoiturage = $covoiturage;
-
-        return $this;
-    }
-
+public function setMarque(string $marque): static
+{
+    $this->marque = $marque;
+    return $this;
+}
 }

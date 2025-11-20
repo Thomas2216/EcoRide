@@ -16,10 +16,10 @@
         <h2 class="h3 mb-3 font-weight-normal">Veuillez vous connecter</h2>
         <form action="{{ path('app_connexion') }}" method="post">
         <label for="email">Email:</label>
-        <input type="text" name="_username" value="{{ last_username }}" required style="border: 2px solid #198754; border-radius: 5px;"><br>
+        <input type="email" name="email" value="{{ last_username }}" required style="border: 2px solid #198754; border-radius: 5px;"><br>
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
         <label for="password">Mot de passe:</label>
-        <input type="password" name="_password" required style="border: 2px solid #198754; border-radius: 5px;"><br>
+        <input type="password" name="password" required style="border: 2px solid #198754; border-radius: 5px;"><br>
 
         <button type="submit" style="background-color: burlywood; color: #198754; border-color: #198754; border-radius: 10px;">Se connecter</button>
         </form>

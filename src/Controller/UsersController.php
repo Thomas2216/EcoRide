@@ -55,4 +55,35 @@ final class UsersController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
+    #[Route('/profil/set-type/{type}', name: 'app_change_type_utilisateur')]
+public function setType(
+    string $type,
+    EntityManagerInterface $em,
+
+): Response {
+    /** @var User $user */
+    $user = $this->getUser();
+
+
+    if (!$user) {
+        throw $this->createAccessDeniedException();
+    }
+
+    $typesValid = ['conducteur', 'passager', 'les_deux'];
+
+    if (!in_array($type, $typesValid)) {
+        throw new \InvalidArgumentException("Type invalide");
+    }
+
+    $user->setTypeUtilisateur($type);
+
+    $em->persist($user);
+    $em->flush();
+
+    $this->addFlash('success', 'Votre rôle a été mis à jour.');
+
+    return $this->redirectToRoute('app_profil'); // page de profil ou autre
+}
+
 }

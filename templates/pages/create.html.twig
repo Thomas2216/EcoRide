@@ -4,8 +4,20 @@
 
     <h2>Créer votre profil</h2>
 
-    {{ form_start(form) }}
-        {{ form(form) }}
-    {{ form_end(form) }}
+        {{ form_start(form) }}
+            {{ form(form) }}
+        {{ form_end(form) }}
+
+    <h3>Choisissez votre type de profil</h3>
+
+        <a href="{{ path('app_change_type_utilisateur', {type: 'conducteur'}) }}"
+            class="btn btn-primary">Je suis conducteur</a>
+
+        <a href="{{ path('app_change_type_utilisateur', {type: 'passager'}) }}"
+            class="btn btn-secondary">Je suis passager</a>
+
+        <a href="{{ path('app_change_type_utilisateur', {type: 'les_deux'}) }}"
+            class="btn btn-success">Je suis les deux</a>
+
 
 {% endblock %}  
