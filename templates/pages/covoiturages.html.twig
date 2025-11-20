@@ -47,14 +47,12 @@
 
                         <hr>
 
-                        {# --- AJOUT DES AVIS DU CONDUCTEUR --- #}
                         <p class="card-text fw-bold">⭐ Avis sur le conducteur :</p>
 
                         {% set avisConducteur = covoiturage.conducteur.avis %}
                         
                         {% if avisConducteur|length > 0 %}
 
-                            {# Note moyenne #}
                             {% set total = 0 %}
                             {% for avis in avisConducteur %}
                                 {% set total = total + avis.note %}
@@ -78,7 +76,7 @@
                         {% endif %}
 
                         <a href="#"
-                            class="btn btn-primary"
+                            class="btn-eco btn-primary"
                             style="background-color: burlywood; color: #198754; border-color: #198754;">
                             Réserver ce covoiturage
                         </a>

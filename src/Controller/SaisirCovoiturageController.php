@@ -22,7 +22,6 @@ final class SaisirCovoiturageController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            // Lier automatiquement le conducteur à l'utilisateur connecté
             $covoiturage->setConducteur($this->getUser());
 
             $em->persist($covoiturage);

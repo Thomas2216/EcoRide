@@ -1,20 +1,35 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-<body>
-    <main>
-            <h2>Bienvenue sur votre espace utilisateur</h2>
-            <div>
-                <p>Gérez vos informations personnelles, vos trajets et vos réservations ici.</p>
-            </div>
-    </main>
-    <a href="{{ path ('app_saisir_covoiturage') }}">Proposer un covoiturage</a>
-    <a href="{{ path ('app_mes_covoiturages') }}">Voir mes covoiturages</a>
-    <a href="{{ path ('app_mes_reservations') }}">Voir mes réservations</a>
-    <a href="{{ path('app_logout') }}">Se déconnecter</a>
+<main>
 
+    <h2 class="user-title">Bienvenue sur votre espace utilisateur</h2>
 
-    <p>Type d’utilisateur : {{ app.user.typeUtilisateur }}</p>
+    <div class="text-user">
+        <p>Gérez vos informations personnelles, vos trajets et vos réservations ici.</p>
+    </div>
 
-</body>
+    <div class="profil-actions">
+        <a class="btn-eco" href="{{ path('app_saisir_covoiturage') }}">
+            Proposer un covoiturage
+        </a>
+
+        <a class="btn-eco" href="{{ path('app_mes_covoiturages') }}">
+            Voir mes covoiturages
+        </a>
+
+        <a class="btn-eco" href="{{ path('app_mes_reservations') }}">
+            Voir mes réservations
+        </a>
+
+        <a class="btn-eco" href="{{ path('app_logout') }}">
+            Se déconnecter
+        </a>
+    </div>
+
+    <div class="text-user">
+        <p><strong>Type d’utilisateur :</strong> {{ app.user.typeUtilisateur }}</p>
+    </div>
+
+</main>
 {% endblock %}

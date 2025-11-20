@@ -85,7 +85,7 @@ class Avis
     {
         if (!$this->users->contains($user)) {
             $this->users->add($user);
-            $user->addAvis($this); // synchronisation ManyToMany
+            $user->addAvis($this); 
         }
 
         return $this;
@@ -94,7 +94,7 @@ class Avis
     public function removeUser(User $user): static
     {
         if ($this->users->removeElement($user)) {
-            $user->removeAvis($this); // synchronisation ManyToMany
+            $user->removeAvis($this); 
         }
 
         return $this;

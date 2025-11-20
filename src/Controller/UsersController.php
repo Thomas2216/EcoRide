@@ -83,7 +83,7 @@ public function setType(
 
     $this->addFlash('success', 'Votre rôle a été mis à jour.');
 
-    return $this->redirectToRoute('app_profil'); // page de profil ou autre
+    return $this->redirectToRoute('app_profil');
 }
 
 }

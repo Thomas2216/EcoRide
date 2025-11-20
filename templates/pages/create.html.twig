@@ -2,14 +2,16 @@
 
 {%block body %}
 
-    <h2>Créer votre profil</h2>
+    <h2 class="create-title">Créer votre profil</h2>
 
+    <div class="form-container">
         {{ form_start(form) }}
             {{ form(form) }}
         {{ form_end(form) }}
+    </div>
 
-    <h3>Choisissez votre type de profil</h3>
-
+    <h3 class="create-title">Choisissez votre type de profil</h3>
+    <div class="choose-type-container">
         <a href="{{ path('app_change_type_utilisateur', {type: 'conducteur'}) }}"
             class="btn btn-primary">Je suis conducteur</a>
 
@@ -18,6 +20,7 @@
 
         <a href="{{ path('app_change_type_utilisateur', {type: 'les_deux'}) }}"
             class="btn btn-success">Je suis les deux</a>
+    </div>
 
 
 {% endblock %}  

@@ -4,9 +4,13 @@
 
 {% block body %}
 <main>
-    <h2>Saisir un nouveau voyage</h2>
-    {{ form_start(form) }}
-        {{ form(form) }}
-    {{ form_end(form) }}
+
+    <h2 class="saisir-title">Saisir un nouveau voyage</h2>
+
+        <div class="form-container">
+            {{ form_start(form) }}
+                {{ form(form) }}
+            {{ form_end(form) }}
+        </div>
 </main>
 {% endblock %} 

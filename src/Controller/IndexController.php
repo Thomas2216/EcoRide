@@ -31,13 +31,6 @@ final class IndexController extends AbstractController
         return $this->render('pages/user.html.twig');
     }
 
-    #[Route('mesreservations', name: 'app_mes_reservations')]
-    #[IsGranted('ROLE_USER')]
-    public function mesReservations(): Response
-    {
-        return $this->render('pages/mesreservations.html.twig');
-    }
-
     #[Route('employee', name: 'app_employee')]
     #[IsGranted('ROLE_EMPLOYEE')]
     public function employee(): Response
