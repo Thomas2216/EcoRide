@@ -59,7 +59,7 @@ final class UsersController extends AbstractController
     #[Route('/profil/set-type/{type}', name: 'app_change_type_utilisateur')]
 public function setType(
     string $type,
-    EntityManagerInterface $em,
+    EntityManagerInterface $e
 
 ): Response {
     /** @var User $user */
