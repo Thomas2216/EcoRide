@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Request as HttpFoundationRequest;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 final class UsersController extends AbstractController
 {
@@ -38,10 +39,9 @@ final class UsersController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Hasher le mot de passe avant de persister
             $hashedPassword = $this->passwordHasher->hashPassword(
                 $user,
-                $user->getPassword() // le mot de passe en clair saisi dans le formulaire
+                $user->getPassword()
             );
             $user->setPassword($hashedPassword);
 
@@ -56,10 +56,11 @@ final class UsersController extends AbstractController
         ]);
     }
 
+    #[IsGranted('ROLE_USER')]
     #[Route('/profil/set-type/{type}', name: 'app_change_type_utilisateur')]
-public function setType(
+    public function setType(
     string $type,
-    EntityManagerInterface $e
+    EntityManagerInterface $em
 
 ): Response {
     /** @var User $user */

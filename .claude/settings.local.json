@@ -3,7 +3,10 @@
     "allow": [
       "Bash(grep -r \"public.*function\" /c/Env/Workspace/EcoRide/src/Entity/*.php)",
       "Bash(grep:*)",
-      "Bash(xargs ls *)"
+      "Bash(xargs ls *)",
+      "Bash(composer require *)",
+      "Bash(composer search *)",
+      "Bash(php *)"
     ]
   }
 }

@@ -1,0 +1,83 @@
+services:
+
+  # Service PHP + Symfony
+  php-symfony:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ecoride_php
+    ports:
+      - "8080:80"
+    volumes:
+      - .:/var/www/html
+    environment:
+      APP_ENV: dev
+      APP_SECRET: change_me_in_production
+      DATABASE_URL: "mysql://root:root@mysql:3306/utilisateur_ecoride?serverVersion=8.0.44&charset=utf8mb4"
+      MONGODB_URL: "mongodb://mongodb:27017"
+      MONGODB_DB: ecoride_stats
+      MESSENGER_TRANSPORT_DSN: "doctrine://default?auto_setup=0"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      mongodb:
+        condition: service_started
+    networks:
+      - ecoride_network
+
+  # Service MySQL (base de données principale)
+  mysql:
+    image: mysql:8.0
+    container_name: ecoride_mysql
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: utilisateur_ecoride
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - ecoride_network
+
+  # Service MongoDB (statistiques NoSQL)
+  mongodb:
+    image: mongo:7
+    container_name: ecoride_mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - ecoride_network
+
+###> doctrine/mongodb-odm-bundle ###
+  mongodb:
+    # In production, you may want to use a managed database service
+    image: mongodb/mongodb-atlas-local:latest
+    environment:
+      - MONGODB_INITDB_DATABASE=${MONGODB_DB:-app}
+      # You should definitely set a root username and password in production
+      - MONGODB_INITDB_ROOT_USERNAME=${MONGODB_USERNAME:-}
+      - MONGODB_INITDB_ROOT_PASSWORD=${MONGODB_PASSWORD:-}
+    volumes:
+      - mongodb_data:/data/db:rw
+      # You may use a bind-mounted host directory instead, so that it is harder to accidentally remove the volume and lose all your data!
+      # - ./docker/mongodb/data:/data/db:rw
+###< doctrine/mongodb-odm-bundle ###
+
+volumes:
+  mysql_data:
+
+###> doctrine/mongodb-odm-bundle ###
+  mongodb_data:
+###< doctrine/mongodb-odm-bundle ###
+  mongodb_data:
+
+networks:
+  ecoride_network:
+    driver: bridge

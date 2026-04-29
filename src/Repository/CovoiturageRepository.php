@@ -16,28 +16,23 @@ class CovoiturageRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Covoiturage::class);
     }
-    /**
-     * @return Covoiturage[] Returns an array of Covoiturage objects
-     */
-    public function findByExampleField($value): array
-    {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('c.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
 
-    public function findOneBySomeField($value): ?Covoiturage
+    /**
+     * Retourne les covoiturages avec au moins 1 place disponible.
+     * Charge conducteur, voiture et avis du conducteur en une seule requête (pas de N+1).
+     *
+     * @return Covoiturage[]
+     */
+    public function findDisponiblesAvecRelations(): array
     {
         return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
+            ->addSelect('conducteur', 'voiture', 'avis')
+            ->leftJoin('c.conducteur', 'conducteur')
+            ->leftJoin('c.voiture', 'voiture')
+            ->leftJoin('conducteur.avis', 'avis')
+            ->where('c.nb_place >= 1')
+            ->orderBy('c.date_depart', 'ASC')
             ->getQuery()
-            ->getOneOrNullResult()
-        ;
+            ->getResult();
     }
 }
