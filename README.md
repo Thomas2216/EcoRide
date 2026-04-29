@@ -163,5 +163,3 @@ Dockerfile
 ## 📄 Licence
 
 Projet réalisé dans un cadre pédagogique — Studi, 2025.
-
-## Architecture du projet
